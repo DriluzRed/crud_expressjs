@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Ver Producto</h1>
+        <h2><%= product.name %></h2>
+        <p><%= product.description %></p>
+
+        <h3 class="mt-4">Editar Producto</h3>
+        <form id="editForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nombre:</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción:</label>
+                <textarea class="form-control" id="description" name="description" required><%= product.description %></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="updateProduct('<%= product.id %>')">Actualizar</button>
+        <a href="/productos" class="btn btn-secondary">Volver</a>
+
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateProduct(productId) {
+            const updatedProduct = {
+                name: $('#name').val(),
+                description: $('#description').val()
+            };
+
+            $.ajax({
+                type: 'PUT',
+                url: '/productos/' + productId,
+                data: JSON.stringify(updatedProduct),
+                contentType: 'application/json',
+                success: function(data) {
+                    if (data.success) {
+                        console.log('Producto actualizado correctamente');
+                        window.location.href = '/productos';
+                    } else {
+                        console.log('Error al actualizar el producto');
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

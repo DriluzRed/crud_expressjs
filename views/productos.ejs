@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Lista de Productos</h1>
+        <ul class="list-group">
+            <% products.forEach(product => { %>
+                <li class="list-group-item">
+                    <h3><%= product.name %></h3>
+                    <p><%= product.description %></p>
+                    <a href="/productos/<%= product.id %>" class="btn btn-primary">Ver Detalles</a>
+                    <a href="#" class="btn btn-danger" onclick="deleteProduct('<%= product.id %>')">Eliminar Producto</a>
+                </li>
+            <% }); %>
+        </ul>
+        <a href="/" class="btn btn-secondary mt-4">Volver al inicio</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function deleteProduct(productId) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/productos/' + productId,
+                    success: function(data) {
+                        if (data.success) {
+                            console.log('Producto eliminado correctamente');
+                            window.location.reload(); // Recarga la página para reflejar los cambios
+                        } else {
+                            console.log('Error al eliminar el producto');
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

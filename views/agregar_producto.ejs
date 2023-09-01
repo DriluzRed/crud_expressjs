@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Agregar Producto</h1>
+        <form id="addForm">
+            <div class="mb-3">
+                <label for="newName" class="form-label">Nombre:</label>
+                <input type="text" class="form-control" id="newName" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="newDescription" class="form-label">Descripción:</label>
+                <textarea class="form-control" id="newDescription" name="description" required></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addProduct()">Agregar Producto</button>
+        </form>
+        <a href="/productos" class="btn btn-secondary mt-2">Volver a la lista</a>
+        <a href="/" class="btn btn-secondary mt-2">Volver al inicio</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function addProduct() {
+            const newName = $('#newName').val();
+            const newDescription = $('#newDescription').val();
+
+            const newProduct = {
+                name: newName,
+                description: newDescription
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/productos',
+                contentType: 'application/json',
+                data: JSON.stringify(newProduct),
+                success: function(data) {
+                    if (data.success) {
+                        console.log('Producto agregado correctamente');
+                        window.location.href = '/productos'; // Redirige a la lista de productos
+                    } else {
+                        console.log('Error al agregar el producto');
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
